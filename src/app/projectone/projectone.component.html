@@ -1,0 +1,41 @@
+
+<div class="">
+    <input type="text" [(ngModel)]="searchFieldValue"/>
+    <button (click)="submit()">Search</button>
+</div>
+
+<h3>Services</h3>
+<table style="width:100%" class="table table-bordered">
+    <tr>
+      <th>Title</th>
+      <th>Link</th>
+    </tr>
+    <tr *ngFor="let data of scrapperData.services">
+      <td>{{data.name}}</td>
+      <td>{{data.href}}</td>
+    </tr>
+</table>
+
+<h3>Contents</h3>
+<table style="width:100%" class="table table-bordered">
+  <tr>
+    <th>Title</th>
+    <th>Link</th>
+  </tr>
+  <tr *ngFor="let data of scrapperData.contents">
+    <td>{{data.name}}</td>
+    <td>{{data.href}}</td>
+  </tr>
+</table>
+
+<h3>News</h3>
+<table style="width:100%" class="table table-bordered">
+  <tr>
+    <th>Title</th>
+    <th>Link</th>
+  </tr>
+  <tr *ngFor="let data of scrapperData.news">
+    <td>{{data.name}}</td>
+    <td>{{data.href}}</td>
+  </tr>
+</table>

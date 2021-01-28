@@ -1,0 +1,11 @@
+<div>
+  <button (click)="clickToProject('one')">Project One</button>
+  <button (click)="clickToProject('two')">Project Two</button>
+</div>
+<div *ngIf="isProjectOneActive">
+  <app-projectone></app-projectone>
+</div>
+<div *ngIf="isProjectTwoActive">
+  <app-projectwo></app-projectwo>
+</div>
+<router-outlet></router-outlet>

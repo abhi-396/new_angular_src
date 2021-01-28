@@ -1,0 +1,134 @@
+<div class="col-6" *ngIf="!is_logged_in && !is_register_new_account">
+  <div class="row">
+    <label>Email: </label>
+    <input type="email" [(ngModel)]="email"/>
+  </div>
+  <div class="row">
+    <label>Password: </label>
+    <input type="password" [(ngModel)]="password"/>
+  </div>
+  <button class="btn btn-primary" (click)="login()">Login</button>
+  <button class="btn btn-primary" (click)="is_register_new_account = true">Register New Account</button>
+</div>
+
+<div *ngIf="!is_logged_in && is_register_new_account">
+  <form [formGroup]="registrationForm" (ngSubmit)="onRegister()">
+    <div class="row">
+      <label>Name: </label>
+      <input type="text" formControlName="name"/>
+    </div>
+    <div class="row">
+      <label>Email: </label>
+      <input type="text" formControlName="email"/>
+      <div *ngIf="registrationForm.controls.confPassword.touched && !registrationForm.controls.email.valid">Email is valid</div>
+    </div>
+    <div class="row">
+      <label>Number </label>
+      <input type="text" formControlName="phone" (keypress)="onlyNumbers($event)" maxlength="10"/>
+    </div>
+    <div class="row">
+      <label>Password: </label>
+      <input type="password" formControlName="password"/>
+    </div>
+    <div class="row">
+      <label>Confirm Password: </label>
+      <input type="password" formControlName="confPassword" (change)="checkPassword()"/>
+      <div *ngIf="!isPasswordConfirmed && registrationForm.controls.confPassword.touched">Please Confirm Password</div>
+    </div>
+    <button class="btn btn-success" *ngIf="!registerMessage" [disabled]="!registrationForm.valid || !isPasswordConfirmed">Register</button>
+    <div *ngIf="registerMessage">{{registerMessage}}</div>
+    <button class="btn btn-success" (click)="is_register_new_account = false">Login</button>
+  </form>
+</div>
+
+<div *ngIf="is_logged_in">
+  <div>
+    <table style="width:100%" class="table table-bordered">
+      <tr>
+        <th>Request Id</th>
+        <th>Request Type</th>
+        <th>Request Desc</th>
+        <th>Request Date</th>
+        <th>Request Status</th>
+        <th></th>
+      </tr>
+      <tr *ngFor="let requestData of requestDataArr">
+        <td>{{requestData.id}}</td>
+        <td>{{requestData.request_type}}</td>
+        <td>{{requestData.request_desc}}</td>
+        <td>{{requestData.date_time}}</td>
+        <td>{{requestData.status}}</td>
+        <td><button class="btn btn-primary text-dark" (click)="viewRecord(requestData)">View</button></td>
+      </tr>
+    </table>
+    <button class="btn btn-primary btn-active" (click)="createRequest()">Create New Request</button>
+  </div>
+  
+  <!-- View Record Detail -->
+  <div *ngIf="requestData" class="col-6">
+    <div class="row">
+      <label>Request Type: {{requestData.request_type}}</label>
+    </div>
+    <div class="row">
+      <label>Request Desc: {{requestData.request_desc}}</label>
+    </div>
+    <div class="row">
+      <label>City: {{requestData.request_city}}</label>
+    </div>
+    <div class="row">
+      <label>State: {{requestData.request_state}}</label>
+    </div>
+    <div class="row">
+      <label>Pin Code: {{requestData.request_pincode}}</label>
+    </div>
+    <div class="row">
+      <label>Alternate Phone N: {{requestData.alternate_phone}}</label>
+    </div>
+    <div class="row">
+      <label>Status: {{requestData.status}}</label>
+    </div>
+    <div class="row">
+      <label>Remarks: {{requestData.remarks}}</label>
+    </div>
+    <div class="row">
+      <label>Updated By: {{requestData.updated_by}}</label>
+    </div>  
+  </div>
+  
+  <div class="col-10" *ngIf="!requestData && isRequestCreate">
+    <form [formGroup]="profileForm">
+      <div>
+        <label>Request Type: </label>
+        <span *ngFor="let requestType of commonMasterData.request_type">
+          <span><label> {{requestType.name}}</label><input type="checkbox" title="One" [value]="requestType.id" (click)="selectCheckBox($event.target.checked, requestType.name)"/></span>        
+        </span>
+      </div>
+      <div class="row">
+        <label>Request Desc</label>
+        <input type="text" formControlName="description"/>
+      </div>
+      <div class="row">
+        <label>City</label>
+        <input type="text" formControlName="city"/>
+      </div>
+      <div class="row">
+        <label>State</label>
+        <select formControlName="state">
+          <option *ngFor="let state of commonMasterData.state" [value]="state.id">{{state.name}}</option>
+        </select>
+      </div>
+      <div class="row">
+        <label>Pin Code</label>
+        <input type="text" formControlName="pinCode" (keypress)="onlyNumbers($event)" maxlength="6"/>
+      </div>
+      <div class="row">
+        <label>Country Code </label>
+        <input type="text" formControlName="countryCode" maxlength="5"/>
+        <label>Number </label>
+        <input type="text" formControlName="alternateNumber" (keypress)="onlyNumbers($event)" maxlength="10"/>
+      </div>
+      <button (click)="submit()" [disabled]="!profileForm.valid || isCheckBoxArrEmpty" *ngIf="!submitMessage">Submit</button>
+      <div  *ngIf="submitMessage">{{submitMessage}}</div>
+    </form>
+  </div>  
+</div>
